@@ -137,7 +137,7 @@
         return;
       }
 
-      fetch("https://script.google.com/macros/s/AKfycby7XQv9AXq2ZqcPWu5L9XCMNv5bMpPiTnb1WXDlydceiTjRdbTqTRMkl4t3dz2m5jHeow/exec", {
+      fetch("https://script.google.com/macros/s/AKfycbzmn5hQcfgWvVZ3YaKHoZLrt1t8cacB4AtCkHNFn1kYtHXHOpKAlRuwBDJPBGKzlwjb/exec", {
         method: "POST",
         body: JSON.stringify({ email, password }),
         headers: { "Content-Type": "application/json" }
@@ -157,7 +157,7 @@
       const email = document.getElementById("email").value.trim();
       const password = document.getElementById("password").value.trim();
 
-      fetch("https://script.google.com/macros/s/AKfycby7XQv9AXq2ZqcPWu5L9XCMNv5bMpPiTnb1WXDlydceiTjRdbTqTRMkl4t3dz2m5jHeow/exec")
+      fetch("https://script.google.com/macros/s/AKfycbzmn5hQcfgWvVZ3YaKHoZLrt1t8cacB4AtCkHNFn1kYtHXHOpKAlRuwBDJPBGKzlwjb/exec")
         .then(res => res.json())
         .then(data => {
           const user = data.find(u => u.email === email && u.password === password);
