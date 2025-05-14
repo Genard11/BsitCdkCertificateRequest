@@ -87,8 +87,8 @@
     <input type="email" id="email" placeholder="Email" required>
     <input type="password" id="password" placeholder="Password" required>
     <div style="text-align: center;">
-      <button class="login-btn" onclick="login()">Log In</button>
-      <button class="signup-btn" onclick="signup()">Sign Up</button>
+      <button class="login-btn" id="loginBtn">Log In</button>
+      <button class="signup-btn" id="signupBtn">Sign Up</button>
     </div>
     <p id="message" style="color: red; text-align:center;"></p>
   </div>
@@ -155,17 +155,23 @@
       const password = document.getElementById("password").value.trim();
 
       fetch("https://script.google.com/macros/s/AKfycbzmn5hQcfgWvVZ3YaKHoZLrt1t8cacB4AtCkHNFn1kYtHXHOpKAlRuwBDJPBGKzlwjb/exec")
-        .then(res => res.json())
-        .then(data => {
-          const user = data.find(u => u.email === email && u.password === password);
-          if (user) {
-            document.getElementById("message").innerText = "";
-            document.getElementById("message").style.color = "green";
-            document.getElementById("message").innerText = "Login successful!";
-            showSection("requests");
-            isLoggedIn = true;
-          } else {
-            document.getElementById("message").innerText = "Invalid credentials.";
+        .then(res => res.text())
+        .then(text => {
+          try {
+            const data = JSON.parse(text);
+            const user = data.find(u => u.email === email && u.password === password);
+            if (user) {
+              document.getElementById("message").style.color = "green";
+              document.getElementById("message").innerText = "Login successful!";
+              showSection("requests");
+              isLoggedIn = true;
+            } else {
+              document.getElementById("message").style.color = "red";
+              document.getElementById("message").innerText = "Invalid credentials.";
+            }
+          } catch (e) {
+            document.getElementById("message").innerText = "Unexpected response. Check your script URL.";
+            console.error("Parsing error:", e, text);
           }
         })
         .catch(err => {
@@ -181,8 +187,11 @@
       document.getElementById("message").innerText = "Logged out successfully.";
     }
 
-    // Show Home section by default on load
-    showSection("home");
+    document.addEventListener("DOMContentLoaded", () => {
+      document.getElementById("loginBtn").addEventListener("click", login);
+      document.getElementById("signupBtn").addEventListener("click", signup);
+      showSection("home");
+    });
   </script>
 
 </body>
