@@ -132,7 +132,7 @@
     const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value.trim();
 
-    fetch("https://script.google.com/macros/s/AKfycbzmn5hQcfgWvVZ3YaKHoZLrt1t8cacB4AtCkHNFn1kYtHXHOpKAlRuwBDJPBGKzlwjb/exec", {
+    fetch("https://script.google.com/macros/s/AKfycbzN7xe2Bg3_aeMSb5PlVhOlKC3pkPBBh1lbDY2x4s2rdOYUbeIXFftK9O-JhGdJj2PW_g/exec", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -154,7 +154,7 @@
     const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value.trim();
 
-    fetch("https://script.google.com/macros/s/AKfycbzmn5hQcfgWvVZ3YaKHoZLrt1t8cacB4AtCkHNFn1kYtHXHOpKAlRuwBDJPBGKzlwjb/exec")
+    fetch("https://script.google.com/macros/s/AKfycbzN7xe2Bg3_aeMSb5PlVhOlKC3pkPBBh1lbDY2x4s2rdOYUbeIXFftK9O-JhGdJj2PW_g/exec")
       .then(res => res.json())
       .then(data => {
         const user = data.find(u => u.email === email && u.password === password);
