@@ -127,51 +127,53 @@
       }
       showSection(section);
     }
-    <script>
-  function signup() {
-    const email = document.getElementById("email").value.trim();
-    const password = document.getElementById("password").value.trim();
 
-    fetch("https://script.google.com/macros/s/AKfycbzN7xe2Bg3_aeMSb5PlVhOlKC3pkPBBh1lbDY2x4s2rdOYUbeIXFftK9O-JhGdJj2PW_g/exec", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ email, password })
-    })
-    .then(res => res.text())
-    .then(response => {
-      document.getElementById("message").style.color = "green";
-      document.getElementById("message").innerText = "Signed up successfully!";
-    })
-    .catch(err => {
-      document.getElementById("message").innerText = "Error signing up.";
-      console.error("Signup error:", err);
-    });
-  }
+    function signup() {
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
 
-  function login() {
-    const email = document.getElementById("email").value.trim();
-    const password = document.getElementById("password").value.trim();
-
-    fetch("https://script.google.com/macros/s/AKfycbzN7xe2Bg3_aeMSb5PlVhOlKC3pkPBBh1lbDY2x4s2rdOYUbeIXFftK9O-JhGdJj2PW_g/exec")
-      .then(res => res.json())
-      .then(data => {
-        const user = data.find(u => u.email === email && u.password === password);
-        if (user) {
-          document.getElementById("message").innerText = "";
-          document.getElementById("message").style.color = "green";
-          document.getElementById("message").innerText = "Login successful!";
-          showSection("requests");
-        } else {
-          document.getElementById("message").innerText = "Invalid credentials.";
-        }
+      fetch("https://script.google.com/macros/s/AKfycbzmn5hQcfgWvVZ3YaKHoZLrt1t8cacB4AtCkHNFn1kYtHXHOpKAlRuwBDJPBGKzlwjb/exec", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ email, password })
+      })
+      .then(res => res.text())
+      .then(response => {
+        document.getElementById("message").style.color = "green";
+        document.getElementById("message").innerText = "Signed up successfully!";
       })
       .catch(err => {
-        document.getElementById("message").innerText = "Error logging in.";
-        console.error("Login error:", err);
+        document.getElementById("message").innerText = "Error signing up.";
+        console.error("Signup error:", err);
       });
-  }
+    }
+
+    function login() {
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
+
+      fetch("https://script.google.com/macros/s/AKfycbzmn5hQcfgWvVZ3YaKHoZLrt1t8cacB4AtCkHNFn1kYtHXHOpKAlRuwBDJPBGKzlwjb/exec")
+        .then(res => res.json())
+        .then(data => {
+          const user = data.find(u => u.email === email && u.password === password);
+          if (user) {
+            document.getElementById("message").innerText = "";
+            document.getElementById("message").style.color = "green";
+            document.getElementById("message").innerText = "Login successful!";
+            showSection("requests");
+            isLoggedIn = true;
+          } else {
+            document.getElementById("message").innerText = "Invalid credentials.";
+          }
+        })
+        .catch(err => {
+          document.getElementById("message").innerText = "Error logging in.";
+          console.error("Login error:", err);
+        });
+    }
+
     function logout() {
       isLoggedIn = false;
       showSection("home");
