@@ -111,88 +111,84 @@
       the church community.
     </p>
   </div>
+<script>
+  const SCRIPT_URL = "https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec"; // <-- Replace with your real script ID
 
-  <script>
-    let isLoggedIn = false;
+  let isLoggedIn = false;
 
-    function showSection(id) {
-      document.querySelectorAll('.container, #requests').forEach(el => el.classList.add('hidden'));
-      document.getElementById(id).classList.remove('hidden');
+  function showSection(id) {
+    document.querySelectorAll('.container, #requests').forEach(el => el.classList.add('hidden'));
+    document.getElementById(id).classList.remove('hidden');
+  }
+
+  function navigate(section) {
+    if (!isLoggedIn && section !== 'home') {
+      document.getElementById("message").innerText = "Please log in first.";
+      return;
     }
+    showSection(section);
+  }
 
-    function navigate(section) {
-      if (!isLoggedIn && section !== 'home') {
-        document.getElementById("message").innerText = "Please log in first.";
-        return;
-      }
-      showSection(section);
-    }
+  function signup() {
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value.trim();
 
-    function signup() {
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value.trim();
+    fetch(SCRIPT_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ email, password, origin: window.location.origin })
+    })
+    .then(res => res.json())
+    .then(response => {
+      document.getElementById("message").style.color = "green";
+      document.getElementById("message").innerText = response.message || "Signed up successfully!";
+    })
+    .catch(err => {
+      document.getElementById("message").innerText = "Error signing up.";
+      console.error("Signup error:", err);
+    });
+  }
 
-      fetch("https://script.google.com/macros/s/AKfycbx3N6R5-7vsfQZXAHiQfnTnE_n387X6kuv-g--dwAcXVPzXWN5MdWmGnGTQ-d_m5UO9hg/exec", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ email, password })
-      })
-      .then(res => res.text())
-      .then(response => {
-        document.getElementById("message").style.color = "green";
-        document.getElementById("message").innerText = "Signed up successfully!";
+  function login() {
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value.trim();
+
+    fetch(SCRIPT_URL)
+      .then(res => res.json())
+      .then(data => {
+        const user = data.find(u => u.email === email && u.password === password);
+        if (user) {
+          document.getElementById("message").style.color = "green";
+          document.getElementById("message").innerText = "Login successful!";
+          showSection("requests");
+          isLoggedIn = true;
+        } else {
+          document.getElementById("message").style.color = "red";
+          document.getElementById("message").innerText = "Invalid credentials.";
+        }
       })
       .catch(err => {
-        document.getElementById("message").innerText = "Error signing up.";
-        console.error("Signup error:", err);
+        document.getElementById("message").innerText = "Error logging in.";
+        console.error("Login error:", err);
       });
-    }
+  }
 
-    function login() {
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value.trim();
+  function logout() {
+    isLoggedIn = false;
+    showSection("home");
+    document.getElementById("message").style.color = "red";
+    document.getElementById("message").innerText = "Logged out successfully.";
+  }
 
-      fetch("https://script.google.com/macros/s/AKfycbx3N6R5-7vsfQZXAHiQfnTnE_n387X6kuv-g--dwAcXVPzXWN5MdWmGnGTQ-d_m5UO9hg/exec")
-        .then(res => res.text())
-        .then(text => {
-          try {
-            const data = JSON.parse(text);
-            const user = data.find(u => u.email === email && u.password === password);
-            if (user) {
-              document.getElementById("message").style.color = "green";
-              document.getElementById("message").innerText = "Login successful!";
-              showSection("requests");
-              isLoggedIn = true;
-            } else {
-              document.getElementById("message").style.color = "red";
-              document.getElementById("message").innerText = "Invalid credentials.";
-            }
-          } catch (e) {
-            document.getElementById("message").innerText = "Unexpected response. Check your script URL.";
-            console.error("Parsing error:", e, text);
-          }
-        })
-        .catch(err => {
-          document.getElementById("message").innerText = "Error logging in.";
-          console.error("Login error:", err);
-        });
-    }
+  document.addEventListener("DOMContentLoaded", () => {
+    document.getElementById("loginBtn").addEventListener("click", login);
+    document.getElementById("signupBtn").addEventListener("click", signup);
+    showSection("home");
+  });
+</script>
 
-    function logout() {
-      isLoggedIn = false;
-      showSection("home");
-      document.getElementById("message").style.color = "red";
-      document.getElementById("message").innerText = "Logged out successfully.";
-    }
-
-    document.addEventListener("DOMContentLoaded", () => {
-      document.getElementById("loginBtn").addEventListener("click", login);
-      document.getElementById("signupBtn").addEventListener("click", signup);
-      showSection("home");
-    });
-  </script>
 
 </body>
 </html>
